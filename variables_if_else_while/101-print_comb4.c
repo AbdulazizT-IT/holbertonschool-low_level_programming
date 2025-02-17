@@ -10,7 +10,7 @@ int main(void)
 
 	int c, n, x;
 
-	for (c = '0' ; c <='9' ; c++)
+	for (c = '0' ; c <= '9' ; c++)
 	{
 		for (n = '0' ; n <= '9' ; n++)
 		{

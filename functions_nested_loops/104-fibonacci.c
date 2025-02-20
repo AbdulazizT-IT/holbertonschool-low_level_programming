@@ -25,32 +25,32 @@ void print_first_92_fibonacci(void)
  */
 void print_remaining_fibonacci(void)
 {
-	unsigned long int a_half1, a_half2, b_half1, b_half2;
-	unsigned long int next_half1, next_half2;
+	unsigned long int a1, a2, b1, b2;
+	unsigned long int next1, next2;
 	int i;
 
-	a_half1 = 754011380; /* First part of 92nd Fibonacci number */
-	a_half2 = 4746346429;
-	b_half1 = 1220016041; /* First part of 93rd Fibonacci number */
-	b_half2 = 7282711261;
+	a1 = 7540113804746346429 / 10000000000;
+	a2 = 7540113804746346429 % 10000000000;
+	b1 = 12200160415121876738 / 10000000000;
+	b2 = 12200160415121876738 % 10000000000;
 
 	for (i = 93; i <= 98; i++)
 	{
-		next_half1 = a_half1 + b_half1;
-		next_half2 = a_half2 + b_half2;
+		next1 = a1 + b1;
+		next2 = a2 + b2;
 
-		if (next_half2 >= 10000000000)
+		if (next2 >= 10000000000)
 		{
-			next_half1 += 1;
-			next_half2 -= 10000000000;
+			next1 += 1;
+			next2 -= 10000000000;
 		}
 
-		printf(", %lu%010lu", next_half1, next_half2);
+		printf(", %lu%010lu", next1, next2);
 
-		a_half1 = b_half1;
-		a_half2 = b_half2;
-		b_half1 = next_half1;
-		b_half2 = next_half2;
+		a1 = b1;
+		a2 = b2;
+		b1 = next1;
+		b2 = next2;
 	}
 }
 

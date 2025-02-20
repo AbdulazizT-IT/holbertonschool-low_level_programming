@@ -1,47 +1,51 @@
 #include <stdio.h>
 
-#define LIMIT 98
-#define SPLIT_THRESHOLD 10000000000
-
+/**
+ * main - Prints the first 98 Fibonacci numbers, starting with
+ *        1 and 2, separated by a comma followed by a space.
+ *
+ * Return: Always 0.
+ */
 int main(void)
 {
-    unsigned long a = 1, b = 2, temp;
-    unsigned long a_high = 0, a_low = 1;
-    unsigned long b_high = 0, b_low = 2;
-    unsigned long temp_high, temp_low;
-    int i;
+	int count;
+	unsigned long fib1 = 0, fib2 = 1, sum;
+	unsigned long fib1_half1, fib1_half2, fib2_half1, fib2_half2;
+	unsigned long half1, half2;
 
-    printf("%lu, %lu", a, b);
+	for (count = 0; count < 92; count++)
+	{
+		sum = fib1 + fib2;
+		printf("%lu, ", sum);
 
-    /* قبل الوصول إلى الأعداد الكبيرة */
-    for (i = 3; i <= 92; i++)  
-    {
-        temp = a + b;
-        a = b;
-        b = temp;
-        printf(", %lu", b);
-    }
+		fib1 = fib2;
+		fib2 = sum;
+	}
 
-    /* بعد تجاوز نطاق `unsigned long` */
-    for (; i <= LIMIT; i++)  
-    {
-        temp_low = a_low + b_low;
-        temp_high = a_high + b_high;
+	fib1_half1 = fib1 / 10000000000;
+	fib2_half1 = fib2 / 10000000000;
+	fib1_half2 = fib1 % 10000000000;
+	fib2_half2 = fib2 % 10000000000;
 
-        if (temp_low >= SPLIT_THRESHOLD)
-        {
-            temp_high++;
-            temp_low -= SPLIT_THRESHOLD;
-        }
+	for (count = 93; count < 99; count++)
+	{
+		half1 = fib1_half1 + fib2_half1;
+		half2 = fib1_half2 + fib2_half2;
+		if (fib1_half2 + fib2_half2 > 9999999999)
+		{
+			half1 += 1;
+			half2 %= 10000000000;
+		}
 
-        printf(", %lu%010lu", temp_high, temp_low);
+		printf("%lu%lu", half1, half2);
+		if (count != 98)
+			printf(", ");
 
-        a_low = b_low;
-        a_high = b_high;
-        b_low = temp_low;
-        b_high = temp_high;
-    }
-
-    printf("\n");
-    return (0);
+		fib1_half1 = fib2_half1;
+		fib1_half2 = fib2_half2;
+		fib2_half1 = half1;
+		fib2_half2 = half2;
+	}
+	printf("\n");
+	return (0);
 }

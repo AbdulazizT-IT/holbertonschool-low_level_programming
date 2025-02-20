@@ -1,68 +1,46 @@
 #include <stdio.h>
 
-/**
- * print_first_92_fibonacci - Prints the first 92 Fibonacci numbers.
- */
-void print_first_92_fibonacci(void)
-{
-	unsigned long int a = 1, b = 2, next;
-	int i;
+#define LIMIT 98
+#define SPLIT_THRESHOLD 10000000000
 
-	printf("%lu, %lu", a, b);
-
-	for (i = 3; i <= 92; i++)
-	{
-		next = a + b;
-		printf(", %lu", next);
-		a = b;
-		b = next;
-	}
-}
-
-/**
- * print_remaining_fibonacci - Prints Fibonacci numbers from 93 to 98.
- * Uses split integer representation for large numbers.
- */
-void print_remaining_fibonacci(void)
-{
-	unsigned long int a1, a2, b1, b2;
-	unsigned long int next1, next2;
-	int i;
-
-	a1 = 7540113804746346429 / 10000000000;
-	a2 = 7540113804746346429 % 10000000000;
-	b1 = 12200160415121876738 / 10000000000;
-	b2 = 12200160415121876738 % 10000000000;
-
-	for (i = 93; i <= 98; i++)
-	{
-		next1 = a1 + b1;
-		next2 = a2 + b2;
-
-		if (next2 >= 10000000000)
-		{
-			next1 += 1;
-			next2 -= 10000000000;
-		}
-
-		printf(", %lu%010lu", next1, next2);
-
-		a1 = b1;
-		a2 = b2;
-		b1 = next1;
-		b2 = next2;
-	}
-}
-
-/**
- * main - Prints the first 98 Fibonacci numbers.
- *
- * Return: Always 0 (Success).
- */
 int main(void)
 {
-	print_first_92_fibonacci();
-	print_remaining_fibonacci();
-	printf("\n");
-	return (0);
+    unsigned long a = 1, b = 2, temp;
+    unsigned long a_high = 0, a_low = 1;
+    unsigned long b_high = 0, b_low = 2;
+    unsigned long temp_high, temp_low;
+    int i;
+
+    printf("%lu, %lu", a, b);
+
+    for (i = 3; i <= 92; i++)  // قبل الوصول إلى الأعداد الكبيرة
+    {
+        temp = a + b;
+        a = b;
+        b = temp;
+        printf(", %lu", b);
+    }
+
+    for (; i <= LIMIT; i++)  // بعد تجاوز نطاق `unsigned long`
+    {
+        temp_low = a_low + b_low;
+        temp_high = a_high + b_high;
+
+        if (temp_low >= SPLIT_THRESHOLD)
+        {
+            temp_high++;
+            temp_low -= SPLIT_THRESHOLD;
+        }
+
+        printf(", %lu%010lu", temp_high, temp_low);
+
+        a_low = b_low;
+        a_high = b_high;
+        b_low = temp_low;
+        b_high = temp_high;
+    }
+
+    printf("\n");
+    return (0);
 }
+

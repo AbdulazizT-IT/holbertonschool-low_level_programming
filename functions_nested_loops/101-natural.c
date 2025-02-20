@@ -1,4 +1,3 @@
-#include "main.h"
 #include <stdio.h>
 
 /**
@@ -9,14 +8,14 @@
  * Description: This function iterates through numbers from 1 to n-1,
  * adds those divisible by 3 or 5, and prints the total sum.
  */
-void sum_of_natural_numbers(int n)
+int main(void)
 {
 
 	int i, total;
 
 	total = 0;
 
-	for (i = 1 ; i < n ; i++)
+	for (i = 0 ; i < 1024 ; i++)
 	{
 		if (i % 3 == 0 || i % 5 == 0)
 		{
@@ -24,6 +23,6 @@ void sum_of_natural_numbers(int n)
 		}
 
 	}
-	printf("%d", total);
-	printf("\n");
+	printf("%d\n", total);
+	return (0);
 }

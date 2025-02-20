@@ -13,7 +13,8 @@ int main(void)
 
     printf("%lu, %lu", a, b);
 
-    for (i = 3; i <= 92; i++)  // قبل الوصول إلى الأعداد الكبيرة
+    /* قبل الوصول إلى الأعداد الكبيرة */
+    for (i = 3; i <= 92; i++)  
     {
         temp = a + b;
         a = b;
@@ -21,7 +22,8 @@ int main(void)
         printf(", %lu", b);
     }
 
-    for (; i <= LIMIT; i++)  // بعد تجاوز نطاق `unsigned long`
+    /* بعد تجاوز نطاق `unsigned long` */
+    for (; i <= LIMIT; i++)  
     {
         temp_low = a_low + b_low;
         temp_high = a_high + b_high;
@@ -43,4 +45,3 @@ int main(void)
     printf("\n");
     return (0);
 }
-

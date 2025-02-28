@@ -8,9 +8,8 @@
  */
 int _atoi(char *s)
 {
+	unsigned int result = 0;
 	int sign = 1;
-	int result = 0;
-	int found_digit = 0;
 
 	while (*s)
 	{
@@ -18,10 +17,16 @@ int _atoi(char *s)
 			sign *= -1;
 		else if (*s >= '0' && *s <= '9')
 		{
+			if (result > 214748364 || (result == 214748364 && *s > '7'))
+			{
+				if (sign == 1)
+					return (2147483647);
+				else
+					return (-2147483648);
+			}
 			result = result * 10 + (*s - '0');
-			found_digit = 1;
 		}
-		else if (found_digit)
+		else if (result > 0)
 			break;
 		s++;
 	}

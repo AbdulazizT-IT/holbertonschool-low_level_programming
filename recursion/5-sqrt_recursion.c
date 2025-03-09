@@ -2,6 +2,7 @@
 
 /**
  * helper_sqrt - Helper function to find the square root recursively.
+ * _sqrt_recursion - return the sqrt
  * @n: The number to find the square root of.
  * @x: The current value being tested as the square root.
  *

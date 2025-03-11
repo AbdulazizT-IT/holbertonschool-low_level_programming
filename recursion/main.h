@@ -12,7 +12,7 @@ int helper_sqrt(int n, int x);
 int is_prime_number(int n);
 int helper_prime_number(int n, int x);
 int is_palindrome(char *s);
-int check_palindrome(char *s, int start, int end);
-int _strlen(char *s);
+int _strlen_recursion(char *s);
+int is_palindrome_helper(char *s, int start, int end);
 
 #endif

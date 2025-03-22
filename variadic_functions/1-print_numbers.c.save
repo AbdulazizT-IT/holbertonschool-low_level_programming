@@ -1,6 +1,0 @@
-#include "variadic_functions.h"
-#include <stdio.h>
-
-void print_number(const char *separator, const unsigned int n, ...)
-{
-	

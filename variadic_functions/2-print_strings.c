@@ -30,7 +30,10 @@ void print_strings(const char *separator, const unsigned int n, ...)
 		{
 			printf("(nil)");
 		}
-		printf("%s", s);
+		else
+		{
+			printf("%s", s);
+		}
 
 		if (separator != NULL && i < n - 1)
 		{

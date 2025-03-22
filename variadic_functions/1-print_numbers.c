@@ -2,6 +2,14 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+/**
+ * print_numbers - Prints numbers separated by a given string.
+ * @separator: The string to separate numbers.
+ * @n: The number of arguments.
+ *
+ * Description: Prints numbers followed by a newline.
+ * If separator is NULL, it is not printed.
+ */
 void print_numbers(const char *separator, const unsigned int n, ...)
 {
 
@@ -29,5 +37,5 @@ void print_numbers(const char *separator, const unsigned int n, ...)
 		}
 	}
 	va_end(args);
-	printf ("\n");
+	printf("\n");
 }

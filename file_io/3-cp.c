@@ -33,8 +33,19 @@ void copy_content(int fd_from, int fd_to, char *src, char *dest)
 	ssize_t rd, wr;
 	char buffer[1024];
 
-	while ((rd = read(fd_from, buffer, sizeof(buffer))) > 0)
+	while (1)
 	{
+		rd = read(fd_from, buffer, sizeof(buffer));
+		if (rd == 0)
+			break;
+		if (rd < 0)
+		{
+			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", src);
+			close(fd_from);
+			close(fd_to);
+			exit(98);
+		}
+
 		wr = write(fd_to, buffer, rd);
 		if (wr < 0 || wr != rd)
 		{
@@ -43,14 +54,6 @@ void copy_content(int fd_from, int fd_to, char *src, char *dest)
 			close(fd_to);
 			exit(99);
 		}
-	}
-
-	if (rd < 0)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", src);
-		close(fd_from);
-		close(fd_to);
-		exit(98);
 	}
 }
 
@@ -75,8 +78,11 @@ int main(int ac, char *av[])
 
 	fd_from = open_source(av[1]);
 	fd_to = open_dest(av[2]);
+
 	copy_content(fd_from, fd_to, av[1], av[2]);
+
 	close_fd(fd_from);
 	close_fd(fd_to);
+
 	return (0);
 }

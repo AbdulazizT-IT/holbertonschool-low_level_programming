@@ -1,101 +1,103 @@
-#define _GNU_SOURCE
 #include "main.h"
 #include <stdio.h>
 
-int usage_msg(void);
-int cant_read(char *);
-int cant_write(char *);
-int cant_close(int);
+#define BUFFER_SIZE 1024
+
+int usage_error(void);
+int read_error(char *filename);
+int write_error(char *filename);
+int close_error(int fd);
 
 /**
- * main - Copies the content of a file to another file.
- * @argc: Number of arguments.
- * @argv: Array of arguments.
- * Return: 0 on success, exits with various codes on failure.
+ * main - copies the content of one file to another
+ * @argc: number of arguments
+ * @argv: argument values (file_from, file_to)
+ *
+ * Return: 0 on success, exits with codes 97, 98, 99, or 100 on failure
  */
 int main(int argc, char *argv[])
 {
-	char buffer[1024];
-	int fd_origin, fd_destiny, size;
+	int fd_from, fd_to, r_bytes, w_bytes;
+	char buffer[BUFFER_SIZE];
 
 	if (argc != 3)
-		exit(usage_msg());
+		exit(usage_error());
 
-	fd_origin = open(argv[1], O_RDONLY);
-	if (fd_origin == -1)
-		exit(cant_read(argv[1]));
+	fd_from = open(argv[1], O_RDONLY);
+	if (fd_from == -1)
+		exit(read_error(argv[1]));
 
-	fd_destiny = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0664);
-	if (fd_destiny == -1)
+	fd_to = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	if (fd_to == -1)
 	{
-		close(fd_origin);
-		exit(cant_write(argv[2]));
+		close(fd_from);
+		exit(write_error(argv[2]));
 	}
 
-	while ((size = read(fd_origin, buffer, 1024)) != 0)
+	while ((r_bytes = read(fd_from, buffer, BUFFER_SIZE)) > 0)
 	{
-		if (size == -1)
+		w_bytes = write(fd_to, buffer, r_bytes);
+		if (w_bytes == -1 || w_bytes != r_bytes)
 		{
-			close(fd_origin);
-			close(fd_destiny);
-			exit(cant_read(argv[1]));
-		}
-
-		if (write(fd_destiny, buffer, size) == -1)
-		{
-			close(fd_origin);
-			close(fd_destiny);
-			exit(cant_write(argv[2]));
+			close(fd_from);
+			close(fd_to);
+			exit(write_error(argv[2]));
 		}
 	}
 
-	if (close(fd_origin) == -1)
-		exit(cant_close(fd_origin));
+	if (r_bytes == -1)
+	{
+		close(fd_from);
+		close(fd_to);
+		exit(read_error(argv[1]));
+	}
 
-	if (close(fd_destiny) == -1)
-		exit(cant_close(fd_destiny));
+	if (close(fd_from) == -1)
+		exit(close_error(fd_from));
+	if (close(fd_to) == -1)
+		exit(close_error(fd_to));
 
 	return (0);
 }
 
 /**
- * usage_msg - Prints usage error message.
- * Return: Exit code 97.
+ * usage_error - prints usage error
+ * Return: exit code 97
  */
-int usage_msg(void)
+int usage_error(void)
 {
 	dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
 	return (97);
 }
 
 /**
- * cant_read - Prints read error message.
- * @fdin: Source file name.
- * Return: Exit code 98.
+ * read_error - prints read error message
+ * @filename: name of the file that can't be read
+ * Return: exit code 98
  */
-int cant_read(char *fdin)
+int read_error(char *filename)
 {
-	dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", fdin);
+	dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", filename);
 	return (98);
 }
 
 /**
- * cant_write - Prints write error message.
- * @fdout: Destination file name.
- * Return: Exit code 99.
+ * write_error - prints write error message
+ * @filename: name of the file that can't be written to
+ * Return: exit code 99
  */
-int cant_write(char *fdout)
+int write_error(char *filename)
 {
-	dprintf(STDERR_FILENO, "Error: Can't write to %s\n", fdout);
+	dprintf(STDERR_FILENO, "Error: Can't write to %s\n", filename);
 	return (99);
 }
 
 /**
- * cant_close - Prints close error message.
- * @fd: File descriptor.
- * Return: Exit code 100.
+ * close_error - prints error when file descriptor can't be closed
+ * @fd: file descriptor
+ * Return: exit code 100
  */
-int cant_close(int fd)
+int close_error(int fd)
 {
 	dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
 	return (100);

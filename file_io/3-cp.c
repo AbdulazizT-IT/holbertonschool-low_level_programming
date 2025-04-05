@@ -15,7 +15,7 @@ int cant_close(int);
 int main(int argc, char *argv[])
 {
 	char buffer[1024];
-	int fd_origin, fd_destiny, size, error;
+	int fd_origin, fd_destiny, size;
 
 	if (argc != 3)
 		exit(usage_msg());
@@ -31,22 +31,21 @@ int main(int argc, char *argv[])
 		exit(cant_write(argv[2]));
 	}
 
-	while ((size = read(fd_origin, buffer, 1024)) > 0)
+	while ((size = read(fd_origin, buffer, 1024)) != 0)
 	{
-		error = write(fd_destiny, buffer, size);
-		if (error == -1)
+		if (size == -1)
+		{
+			close(fd_origin);
+			close(fd_destiny);
+			exit(cant_read(argv[1]));
+		}
+
+		if (write(fd_destiny, buffer, size) == -1)
 		{
 			close(fd_origin);
 			close(fd_destiny);
 			exit(cant_write(argv[2]));
 		}
-	}
-
-	if (size == -1)
-	{
-		close(fd_origin);
-		close(fd_destiny);
-		exit(cant_read(argv[1]));
 	}
 
 	if (close(fd_origin) == -1)

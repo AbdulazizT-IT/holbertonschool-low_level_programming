@@ -15,23 +15,23 @@ char *new_ptr, *old_ptr;
 
 /* If new_size == old_size, return ptr */
 if (new_size == old_size)
-return ptr;
+return (ptr);
 
 /* If ptr is NULL, equivalent to malloc(new_size) */
 if (ptr == NULL)
-return malloc(new_size);
+return (malloc(new_size));
 
 /* If new_size is 0 and ptr is not NULL, free and return NULL */
 if (new_size == 0)
 {
 free(ptr);
-return NULL;
+return (NULL);
 }
 
 /* Allocate new memory */
 new_ptr = malloc(new_size);
 if (new_ptr == NULL)
-return NULL;
+return (NULL);
 
 /* Copy contents from old memory to new memory */
 old_ptr = ptr;
@@ -41,5 +41,5 @@ new_ptr[i] = old_ptr[i];
 /* Free old memory */
 free(ptr);
 
-return new_ptr;
+return (new_ptr);
 }

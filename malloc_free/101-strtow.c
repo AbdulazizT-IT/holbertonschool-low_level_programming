@@ -1,6 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <ctype.h>
 
 /**
@@ -37,7 +35,8 @@ return (count);
 char **strtow(char *str)
 {
 char **words;
-int i = 0, k = 0, wc, start, end, len;
+int i = 0, j = 0, k = 0, wc, start, end, len;
+
 if (str == NULL || *str == '\0')
 return (NULL);
 wc = word_count(str);
@@ -65,7 +64,8 @@ free(words[k]);
 free(words);
 return (NULL);
 }
-strncpy(words[k], str + start, len);
+for (j = 0; j < len; j++)
+words[k][j] = str[start + j];
 words[k][len] = '\0';
 k++;
 }
@@ -73,3 +73,4 @@ k++;
 words[k] = NULL;
 return (words);
 }
+
